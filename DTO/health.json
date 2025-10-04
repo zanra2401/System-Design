@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schemas/health.json",
+  "title": "Health Check DTO",
+  "definitions": {
+    "HealthStatus": {
+      "type": "object",
+      "properties": {
+        "service": { "type": "string" },
+        "status": { "type": "string", "enum": ["ok", "degraded", "down"] },
+        "last_checked": { "type": "string", "format": "date-time" },
+        "details": { "type": ["object", "null"] }
+      },
+      "required": ["service", "status", "last_checked"],
+      "additionalProperties": false
+    }
+  }
+}

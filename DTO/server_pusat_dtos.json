@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schemas/server_pusat_dtos.json",
+  "title": "Server Pusat DTOs",
+  "description": "JSON Schemas and example payloads for Server Pusat (metadata/index) entities",
+  "definitions": {
+    "PutusanPusat": {
+      "type": "object",
+      "properties": {
+        "id_putusan_pusat": { "type": "string", "format": "uuid" },
+        "id_putusan_daerah": { "type": "string", "format": "uuid" },
+        "id_lembaga": { "type": "string", "format": "uuid" },
+        "nomor_putusan": { "type": "string" },
+        "tahun": { "type": "integer" },
+        "jenis_putusan": { "type": "string" },
+        "kata_kunci": { "type": "string" },
+        "url_detail": { "type": "string", "format": "uri" },
+        "status_validasi": { "type": "string", "enum": ["Terverifikasi", "Belum Diverifikasi", "Diperbarui"] },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id_putusan_daerah", "id_lembaga", "nomor_putusan", "url_detail"],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id_putusan_pusat": "9a8b7c6d-1111-2222-3333-444455556666",
+          "id_putusan_daerah": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "id_lembaga": "a1b2c3d4-1111-2222-3333-444455556666",
+          "nomor_putusan": "45/Pdt.G/2024/PN.BO",
+          "tahun": 2024,
+          "jenis_putusan": "Perdata",
+          "kata_kunci": "gugatan, perdata",
+          "url_detail": "https://daerah.example.gov/api/putusan/3fa85f64",
+          "status_validasi": "Belum Diverifikasi",
+          "created_at": "2024-05-12T08:31:10Z",
+          "updated_at": "2024-05-12T08:31:10Z"
+        }
+      ]
+    },
+
+    "Daerah": {
+      "type": "object",
+      "properties": {
+        "id_daerah": { "type": "string", "format": "uuid" },
+        "nama_daerah": { "type": "string" },
+        "provinsi": { "type": "string" },
+        "wilayah_hukum": { "type": "string" },
+        "url_server": { "type": "string", "format": "uri" }
+      },
+      "required": ["id_daerah", "nama_daerah", "url_server"],
+      "additionalProperties": false,
+      "examples": [
+        { "id_daerah": "a1b2c3d4-1111-2222-3333-444455556666", "nama_daerah": "Pengadilan Negeri Bojonegoro", "provinsi": "Jawa Timur", "wilayah_hukum": "Bojonegoro", "url_server": "https://bojonegoro.example.gov" }
+      ]
+    },
+
+    "LembagaPeradilan": {
+      "type": "object",
+      "properties": {
+        "id_lembaga": { "type": "string", "format": "uuid" },
+        "nama_lembaga": { "type": "string" },
+        "jenis_lembaga": { "type": "string" },
+        "tingkatan": { "type": "string" },
+        "id_daerah": { "type": "string", "format": "uuid" },
+        "url_api": { "type": "string", "format": "uri" }
+      },
+      "required": ["id_lembaga", "nama_lembaga", "id_daerah"],
+      "additionalProperties": false,
+      "examples": [
+        { "id_lembaga": "a1b2c3d4-1111-2222-3333-444455556666", "nama_lembaga": "Pengadilan Negeri Bojonegoro", "jenis_lembaga": "Peradilan Umum", "tingkatan": "PN", "id_daerah": "a1b2c3d4-1111-2222-3333-444455556666", "url_api": "https://bojonegoro.example.gov/api" }
+      ]
+    },
+
+    "SinkronisasiLog": {
+      "type": "object",
+      "properties": {
+        "id_sync": { "type": "string", "format": "uuid" },
+        "id_lembaga": { "type": "string", "format": "uuid" },
+        "waktu_sync": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["berhasil", "gagal", "pending"] },
+        "jumlah_data": { "type": "integer" },
+        "pesan_error": { "type": ["string", "null"] }
+      },
+      "required": ["id_sync", "id_lembaga", "waktu_sync", "status"],
+      "additionalProperties": false,
+      "examples": [
+        { "id_sync": "s1s2s3s4-1111-2222-3333-444455556666", "id_lembaga": "a1b2c3d4-1111-2222-3333-444455556666", "waktu_sync": "2024-05-12T08:32:00Z", "status": "berhasil", "jumlah_data": 42, "pesan_error": null }
+      ]
+    }
+    ,
+
+    "SearchRequest": {
+      "type": "object",
+      "properties": {
+        "query": { "type": "string" },
+        "nomor_putusan": { "type": "string" },
+        "tahun": { "type": "integer" },
+        "jenis_putusan": { "type": "string" },
+        "kata_kunci": { "type": "string" },
+        "id_daerah": { "type": "string", "format": "uuid" },
+        "id_lembaga": { "type": "string", "format": "uuid" },
+        "from_date": { "type": "string", "format": "date" },
+        "to_date": { "type": "string", "format": "date" },
+        "sort_by": { "type": "string", "enum": ["tahun", "nomor_putusan", "created_at"] },
+        "sort_order": { "type": "string", "enum": ["asc", "desc"], "default": "desc" },
+        "page": { "type": "integer", "minimum": 1, "default": 1 },
+        "per_page": { "type": "integer", "minimum": 1, "maximum": 100, "default": 20 }
+      },
+      "additionalProperties": false,
+      "examples": [
+        { "query": "gugatan", "tahun": 2024, "page": 1, "per_page": 20, "sort_by": "tahun", "sort_order": "desc" }
+      ]
+    },
+
+    "Pagination": {
+      "type": "object",
+      "properties": {
+        "page": { "type": "integer" },
+        "per_page": { "type": "integer" },
+        "total_items": { "type": "integer" },
+        "total_pages": { "type": "integer" }
+      },
+      "required": ["page", "per_page", "total_items", "total_pages"],
+      "additionalProperties": false
+    },
+
+    "SearchResponse": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PutusanPusat" }
+        },
+        "pagination": { "$ref": "#/definitions/Pagination" }
+      },
+      "required": ["items", "pagination"],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "items": [
+            { "id_putusan_pusat": "9a8b7c6d-1111-2222-3333-444455556666", "id_putusan_daerah": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "id_lembaga": "a1b2c3d4-1111-2222-3333-444455556666", "nomor_putusan": "45/Pdt.G/2024/PN.BO", "tahun": 2024, "jenis_putusan": "Perdata", "kata_kunci": "gugatan, perdata", "url_detail": "https://daerah.example.gov/api/putusan/3fa85f64", "status_validasi": "Belum Diverifikasi", "created_at": "2024-05-12T08:31:10Z", "updated_at": "2024-05-12T08:31:10Z" }
+          ],
+          "pagination": { "page": 1, "per_page": 20, "total_items": 1, "total_pages": 1 }
+        }
+      ]
+    }
+  }
+}

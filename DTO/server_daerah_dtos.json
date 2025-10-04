@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schemas/server_daerah_dtos.json",
+  "title": "Server Daerah DTOs",
+  "description": "JSON Schemas and example payloads for Server Daerah entities",
+  "definitions": {
+    "PutusanDaerah": {
+      "type": "object",
+      "properties": {
+        "id_putusan": { "type": "string", "format": "uuid" },
+        "nomor_putusan": { "type": "string" },
+        "jenis_putusan": { "type": "string" },
+        "tingkat_proses": { "type": "string" },
+        "klasifikasi": { "type": "string" },
+        "kata_kunci": { "type": "string" },
+        "tahun": { "type": "integer" },
+        "tanggal_register": { "type": "string", "format": "date-time" },
+        "amar": { "type": "string" },
+        "catatan_amar": { "type": "string" },
+        "file_pdf_url": { "type": "string", "format": "uri" },
+        "id_lembaga": { "type": "string", "format": "uuid" },
+        "created_at": { "type": "string", "format": "date-time" },
+        "updated_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["nomor_putusan", "id_lembaga"],
+      "additionalProperties": false,
+      "examples": [
+        {
+          "id_putusan": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          "nomor_putusan": "45/Pdt.G/2024/PN.BO",
+          "jenis_putusan": "Perdata",
+          "tingkat_proses": "Pertama",
+          "klasifikasi": "Perdata Umum",
+          "kata_kunci": "gugatan, perdata",
+          "tahun": 2024,
+          "tanggal_register": "2024-05-12T08:30:00Z",
+          "amar": "Mengabulkan gugatan",
+          "catatan_amar": "-",
+          "file_pdf_url": "https://daerah.example.gov/files/3fa85f64.pdf",
+          "id_lembaga": "a1b2c3d4-1111-2222-3333-444455556666",
+          "created_at": "2024-05-12T08:31:00Z",
+          "updated_at": "2024-05-12T08:31:00Z"
+        }
+      ]
+    },
+
+    "PihakTerkait": {
+      "type": "object",
+      "properties": {
+        "id_pihak": { "type": "string", "format": "uuid" },
+        "id_putusan": { "type": "string", "format": "uuid" },
+        "nama_pihak": { "type": "string" },
+        "peran": { "type": "string", "enum": ["Terdakwa", "Pemohon", "Penuntut Umum", "Pihak Lain"] }
+      },
+      "required": ["id_putusan", "nama_pihak"],
+      "additionalProperties": false,
+      "examples": [
+        { "id_pihak": "b1c2d3e4-0000-1111-2222-333344445555", "id_putusan": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "nama_pihak": "PT. Contoh", "peran": "Pemohon" }
+      ]
+    },
+
+    "Hakim": {
+      "type": "object",
+      "properties": {
+        "id_hakim": { "type": "string", "format": "uuid" },
+        "nama_hakim": { "type": "string" },
+        "nip": { "type": "string" }
+      },
+      "required": ["nama_hakim"],
+      "additionalProperties": false,
+      "examples": [
+        { "id_hakim": "d4c3b2a1-9999-8888-7777-666655554444", "nama_hakim": "Dr. H. Contoh Hakim", "nip": "19850101 200501 1 001" }
+      ]
+    },
+
+    "PutusanHakim": {
+      "type": "object",
+      "properties": {
+        "id_putusan": { "type": "string", "format": "uuid" },
+        "id_hakim": { "type": "string", "format": "uuid" },
+        "peran": { "type": "string", "enum": ["Ketua", "Anggota"] }
+      },
+      "required": ["id_putusan", "id_hakim"],
+      "additionalProperties": false,
+      "examples": [
+        { "id_putusan": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "id_hakim": "d4c3b2a1-9999-8888-7777-666655554444", "peran": "Ketua" }
+      ]
+    },
+
+    "Panitera": {
+      "type": "object",
+      "properties": {
+        "id_panitera": { "type": "string", "format": "uuid" },
+        "id_putusan": { "type": "string", "format": "uuid" },
+        "nama_panitera": { "type": "string" }
+      },
+      "required": ["id_putusan", "nama_panitera"],
+      "additionalProperties": false,
+      "examples": [
+        { "id_panitera": "e5f6g7h8-2222-3333-4444-555566667777", "id_putusan": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "nama_panitera": "Budi" }
+      ]
+    },
+
+    "PutusanEvent": {
+      "type": "object",
+      "properties": {
+        "event_id": { "type": "string", "format": "uuid" },
+        "event_type": { "type": "string", "enum": ["PutusanCreated", "PutusanUpdated", "PutusanDeleted"] },
+        "id_putusan": { "type": "string", "format": "uuid" },
+        "payload": { "type": "object" },
+        "occurred_at": { "type": "string", "format": "date-time" },
+        "source_daerah": { "type": "string" }
+      },
+      "required": ["event_type", "id_putusan", "payload"],
+      "additionalProperties": false,
+      "examples": [
+        { "event_id": "f1e2d3c4-1111-2222-3333-444455556666", "event_type": "PutusanCreated", "id_putusan": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "payload": { "nomor_putusan": "45/Pdt.G/2024/PN.BO" }, "occurred_at": "2024-05-12T08:31:05Z", "source_daerah": "a1b2c3d4-1111-2222-3333-444455556666" }
+      ]
+    }
+  
+  }
+  }

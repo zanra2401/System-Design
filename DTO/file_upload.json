@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schemas/file_upload.json",
+  "title": "File Upload DTO",
+  "definitions": {
+    "FileUploadResponse": {
+      "type": "object",
+      "properties": {
+        "file_pdf_url": { "type": "string", "format": "uri" },
+        "size_bytes": { "type": "integer" },
+        "checksum": { "type": "string" },
+        "uploaded_at": { "type": "string", "format": "date-time" }
+      },
+      "required": ["file_pdf_url"],
+      "additionalProperties": false,
+      "examples": [ { "file_pdf_url": "https://daerah.example.gov/files/3fa85f64.pdf", "size_bytes": 234567, "checksum": "sha256:abcd...", "uploaded_at": "2024-05-12T08:31:00Z" } ]
+    }
+  }
+}

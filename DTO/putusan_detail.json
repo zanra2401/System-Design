@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.org/schemas/putusan_detail.json",
+  "title": "Putusan Detail DTO",
+  "definitions": {
+    "PutusanDetail": {
+      "type": "object",
+      "properties": {
+        "id_putusan": { "type": "string", "format": "uuid" },
+        "nomor_putusan": { "type": "string" },
+        "jenis_putusan": { "type": "string" },
+        "tahun": { "type": "integer" },
+        "tanggal_register": { "type": "string", "format": "date-time" },
+        "amar": { "type": "string" },
+        "catatan_amar": { "type": "string" },
+        "file_pdf_url": { "type": "string", "format": "uri" },
+        "id_lembaga": { "type": "string", "format": "uuid" },
+        "pihak_terkait": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PihakTerkaitShort" }
+        },
+        "hakim": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/HakimShort" }
+        },
+        "panitera": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/PaniteraShort" }
+        }
+      },
+      "required": ["id_putusan", "nomor_putusan", "id_lembaga"],
+      "additionalProperties": false,
+      "examples": [ { "id_putusan": "3fa85f64-5717-4562-b3fc-2c963f66afa6", "nomor_putusan": "45/Pdt.G/2024/PN.BO", "jenis_putusan": "Perdata", "tahun": 2024, "tanggal_register": "2024-05-12T08:30:00Z", "amar": "Mengabulkan gugatan", "file_pdf_url": "https://daerah.example.gov/files/3fa85f64.pdf", "id_lembaga": "a1b2c3d4-1111-2222-3333-444455556666", "pihak_terkait": [ { "id_pihak": "b1c2d3e4-0000-1111-2222-333344445555", "nama_pihak": "PT. Contoh", "peran": "Pemohon" } ], "hakim": [ { "id_hakim": "d4c3b2a1-9999-8888-7777-666655554444", "nama_hakim": "Dr. H. Contoh Hakim" } ], "panitera": [ { "id_panitera": "e5f6g7h8-2222-3333-4444-555566667777", "nama_panitera": "Budi" } ] } ]
+    },
+
+    "PihakTerkaitShort": {
+      "type": "object",
+      "properties": { "id_pihak": { "type": "string", "format": "uuid" }, "nama_pihak": { "type": "string" }, "peran": { "type": "string" } },
+      "required": ["id_pihak", "nama_pihak"],
+      "additionalProperties": false
+    },
+
+    "HakimShort": {
+      "type": "object",
+      "properties": { "id_hakim": { "type": "string", "format": "uuid" }, "nama_hakim": { "type": "string" } },
+      "required": ["id_hakim", "nama_hakim"],
+      "additionalProperties": false
+    },
+
+    "PaniteraShort": {
+      "type": "object",
+      "properties": { "id_panitera": { "type": "string", "format": "uuid" }, "nama_panitera": { "type": "string" } },
+      "required": ["id_panitera", "nama_panitera"],
+      "additionalProperties": false
+    }
+  }
+}
