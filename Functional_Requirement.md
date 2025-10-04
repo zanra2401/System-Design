@@ -1,6 +1,6 @@
 # Functional Requirements: Web Sistem Upload dan Melihat Putusan
 
-## 1. **User Authentication and Authorization (Autentikasi dan Otorisasi Pengguna)**
+## 1. **Admin Authentication and Authorization (Autentikasi dan Otorisasi Pengguna)**
 
 **Requirement:**
 - Pengguna harus dapat melakukan **login** dengan akun yang valid untuk mengakses sistem.
